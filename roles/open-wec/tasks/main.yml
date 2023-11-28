@@ -11,8 +11,8 @@
 
 - name: Copy systemd unit file
   become: yes
-  ansible.builtin.copy:
-    src: openwec.service
+  ansible.builtin.template:
+    src: openwec.service.j2
     dest: /etc/systemd/system/openwec.service
     mode: 0644
   notify:
@@ -25,6 +25,8 @@
     src: openwec.conf.toml
     dest: /etc/openwec.conf.toml
     mode: 0400
+    owner: "{{ wec_user }}"
+    group: "{{ wec_group }}"
   notify: service-restart
 
 - name: Copy openwec keytab
@@ -33,6 +35,8 @@
     src: openwec.conf.toml
     dest: /etc/openwec.conf.toml
     mode: 0400
+    owner: "{{ wec_user }}"
+    group: "{{ wec_group }}"
   notify: service-restart
 
 - name: Create db path
@@ -40,9 +44,13 @@
     state: directory
     path: /var/openwec/
     mode: 0755
+    owner: "{{ wec_user }}"
+    group: "{{ wec_group }}"
 
 - name: Create log path
   ansible.builtin.file:
     state: directory
     path: /var/log/wec.log/
     mode: 0755
+    owner: "{{ wec_user }}"
+    group: "{{ wec_group }}"
