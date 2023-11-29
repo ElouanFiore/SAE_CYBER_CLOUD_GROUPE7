@@ -23,7 +23,7 @@
 - name: Copy dashboard certs
   become: yes
   ansible.builtin.copy:
-    src: "{{ item }}"
+    src: "certs/{{ item }}"
     dest: "/etc/wazuh-dashboard/certs/{{ item }}"
     mode: 0400
     owner: wazuh-dashboard

@@ -17,7 +17,7 @@
 - name: Copy indexer certs
   become: yes
   ansible.builtin.copy:
-    src: "{{ item }}"
+    src: "certs/{{ item }}"
     dest: "/etc/wazuh-indexer/certs/{{ item }}"
     mode: 0400
     owner: wazuh-indexer

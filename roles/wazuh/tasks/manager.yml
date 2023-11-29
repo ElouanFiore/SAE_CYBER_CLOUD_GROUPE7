@@ -21,7 +21,7 @@
 - name: Copy filebeat certs
   become: yes
   ansible.builtin.copy:
-    src: "{{ item }}"
+    src: "certs/{{ item }}"
     dest: "/etc/filebeat/certs/{{ item }}"
     mode: 0400
     owner: root
