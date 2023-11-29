@@ -2,3 +2,15 @@ linux:
   hosts:
     open-wec:
     wazuh:
+
+windows:
+  children:
+    dc:
+      hosts:
+        DC01:
+        DC02:
+        DC03:
+    serv:
+      hosts:
+        SRV02:
+        SRV03:
