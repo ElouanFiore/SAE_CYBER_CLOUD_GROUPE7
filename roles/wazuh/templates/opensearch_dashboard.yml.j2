@@ -1,7 +1,7 @@
 server.port: 443
 opensearch.ssl.verificationMode: certificate
-opensearch.username: {{ kibana }}
-opensearch.password: {{ kibana_pwd }}
+opensearch.username: 'kibanaserver'
+opensearch.password: '{{ kibanaserver_pwd }}'
 opensearch.requestHeadersAllowlist: ["securitytenant","Authorization"]
 opensearch_security.multitenancy.enabled: false
 opensearch_security.readonly_mode.roles: ["kibana_read_only"]

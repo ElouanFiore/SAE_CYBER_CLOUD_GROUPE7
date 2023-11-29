@@ -1,7 +1,7 @@
 output.elasticsearch:
   protocol: https
-  username: "{{ filebeat }}"
-  password: "{{ filebeat_pwd }}"
+  username: 'admin'
+  password: '{{ admin_pwd }}'
   ssl.certificate_authorities:
     - /etc/filebeat/certs/root-ca.pem
   ssl.certificate: "/etc/filebeat/certs/wazuh-1.pem"
