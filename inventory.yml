@@ -1,3 +1,4 @@
 linux:
   hosts:
     open-wec:
+    wazuh:

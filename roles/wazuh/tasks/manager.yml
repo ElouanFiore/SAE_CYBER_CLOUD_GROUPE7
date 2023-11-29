@@ -1,0 +1,43 @@
+- name: Install wazuh-manager and filebeat
+  become: yes
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - wazuh-manager
+    - filebeat
+
+- name: Create filebeat cert directory
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    path: /etc/filebeat/certs
+    mode: 0500
+    owner: root
+    group: root
+  notify: restart-filbeat
+
+- name: Copy filebeat certs
+  become: yes
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/filebeat/certs/{{ item }}"
+    mode: 0400
+    owner: root
+    group: root
+  loop:
+    - wazuh-1.pem
+    - wazuh-1-key.pem
+    - root-ca.pem
+  notify: restart-filbeat
+
+- name: Copy filebeat conf
+  become: yes
+  ansible.builtin.template:
+    src: filebeat.yml.j2
+    dest: /etc/filebeat/filebeat.yml
+    mode: 0600
+    owner: root
+    group: root
+  notify: restart-filbeat

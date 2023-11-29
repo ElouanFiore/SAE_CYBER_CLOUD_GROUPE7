@@ -1,0 +1,43 @@
+- name: Install wazuh-dashboard and needed
+  become: yes
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - wazuh-dashboard
+    - debhelper
+    - tar
+    - curl
+    - libcap2-bin
+
+- name: Create dashboard cert directory
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    path: /etc/wazuh-dashboard/certs
+    mode: 0500
+    owner: wazuh-dashboard
+    group: wazuh-dashboard
+
+- name: Copy dashboard certs
+  become: yes
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/wazuh-dashboard/certs/{{ item }}"
+    mode: 0400
+    owner: wazuh-dashboard
+    group: wazuh-dashboard
+  loop:
+    - dashboard.pem
+    - dashboard-key.pem
+    - root-ca.pem
+
+- name: Copy dashboard conf
+  become: yes
+  ansible.builtin.template:
+    src: opensearch_dashboard.yml.j2
+    dest: /etc/wazuh-dashboard/opensearch_dashboard.yml
+    mode: 0640
+    owner: wazuh-dashboard
+    group: wazuh-dashboard

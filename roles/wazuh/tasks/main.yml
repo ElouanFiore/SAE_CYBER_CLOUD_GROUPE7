@@ -1,0 +1,9 @@
+- import_tasks: prepare.yml
+
+- import_tasks: indexer.yml
+  notify: restart-indexer
+
+- import_tasks: manager.yml
+
+- import_tasks: dashboard.yml
+  notify: restart-dashboard

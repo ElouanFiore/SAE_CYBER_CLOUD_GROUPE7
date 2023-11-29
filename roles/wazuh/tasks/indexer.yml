@@ -1,0 +1,48 @@
+- name: Install wazuh indexer
+  become: yes
+  ansible.builtin.apt:
+    name: wazuh-indexer
+    state: present
+    update_cache: true
+
+- name: Create cert directory
+  become: yes
+  ansible.builtin.file:
+    state: directory
+    path: /etc/wazuh-indexer/certs
+    mode: 0500
+    owner: wazuh-indexer
+    group: wazuh-indexer
+
+- name: Copy indexer certs
+  become: yes
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/wazuh-indexer/certs/{{ item }}"
+    mode: 0400
+    owner: wazuh-indexer
+    group: wazuh-indexer
+  loop:
+    - node-1.pem
+    - node-1-key.pem
+    - admin.pem
+    - admin-key.pem
+    - root-ca.pem
+
+- name: Copy opensearch conf
+  become: yes
+  ansible.builtin.copy:
+    src: opensearch.yml
+    dest: /etc/wazuh-indexer/opensearch.yml
+    mode: 0660
+    owner: wazuh-indexer
+    group: wazuh-indexer
+
+- name: Copy opensearch users
+  become: yes
+  ansible.builtin.copy:
+    src: internal_users.yml
+    dest: /etc/wazuh-indexer/opensearch-security/internal_users.yml
+    mode: 0644
+    owner: wazuh-indexer
+    group: wazuh-indexer
