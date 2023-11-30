@@ -3,4 +3,3 @@
   hosts: open-wec
   roles:
     - open-wec
-

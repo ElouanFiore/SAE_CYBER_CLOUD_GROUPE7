@@ -1,0 +1,2 @@
+---
+root_dir: "{{ ansible_facts['ansible_env']['PATH'] }}"

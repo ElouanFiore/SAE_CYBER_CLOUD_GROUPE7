@@ -1,0 +1,30 @@
+- name: Install docker script
+  ansible.builtin.get_url:
+    url: https://releases.rancher.com/install-docker/20.10.sh
+    dest: /tmp
+    mode: '0744'
+- name: Run docker script
+  ansible.builtin.command:
+    "/tmp/20.10.sh"
+- name: Copy pushou script
+  become: true
+  ansible.builtin.copy:
+    src: lanceES.sh
+    dst: /tmp
+    owner: root
+    mode: "711"
+  loop:
+    - lanceES.sh
+    - curlES.sh
+    - lancefleet.sh
+- name: install docker compose
+  ansible.builtin.apt:
+    name: docker-compose
+    state: present
+- name: run pushou scripts
+  become: true
+  ansible.builtin.shell:
+    "tmp/{{ item }}"
+  loop:
+    - lanceES.sh
+    - lancefleet.sh
