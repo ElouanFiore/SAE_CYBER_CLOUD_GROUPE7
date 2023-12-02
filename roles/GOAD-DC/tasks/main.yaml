@@ -1,0 +1,21 @@
+- name: copy python3 scripts
+  ansible.builtin.copy:
+    src: dc_token.py
+    dst: dc_token.py
+
+- name: install python3
+  chocolatey.chocolatey.win_chocolatey:
+    name: python3
+    state: present
+
+- name: get dc token
+  ansible.windows.win_powershell:
+    script: |
+    "python3 dc_token.py"
+  register: dc_token
+
+- name: register fleet
+  become: true
+  ansible.windows.win_powershell:
+    script: |
+    "script donné par ES {{ dc_token }}"

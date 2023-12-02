@@ -1,0 +1,21 @@
+- name: copy python3 scripts
+  ansible.builtin.copy:
+    src: srv_token.py
+    dst: srv_token.py
+
+- name: install python3
+  chocolatey.chocolatey.win_chocolatey:
+    name: python3
+    state: present
+
+- name: get srv token
+  ansible.windows.win_powershell:
+    script: |
+    "python3 srv_token.py"
+  register: srv_token
+
+- name: register fleet
+  become: true
+  ansible.windows.win_powershell:
+    script: |
+    "script donné par ES {{ srv_token }}"

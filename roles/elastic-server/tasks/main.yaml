@@ -9,14 +9,21 @@
 - name: Copy pushou script
   become: true
   ansible.builtin.copy:
-    src: lanceES.sh
+    src: {{ item }}
     dst: /tmp
     owner: root
     mode: "711"
   loop:
-    - lanceES.sh
-    - curlES.sh
-    - lancefleet.sh
+    - 1  
+    - Makefile  
+    - README.md  
+    - config  
+    - docker-compose.yml  
+    - etc  
+    - lib  
+    - scripts
+    - templates
+    - update.yaml
 - name: install docker compose
   ansible.builtin.apt:
     name: docker-compose
@@ -24,7 +31,8 @@
 - name: run pushou scripts
   become: true
   ansible.builtin.shell:
-    "tmp/{{ item }}"
+    "make {{ item }}"
   loop:
-    - lanceES.sh
-    - lancefleet.sh
+    - ES
+    - siem
+    - fleet
