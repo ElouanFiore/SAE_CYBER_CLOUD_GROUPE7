@@ -8,22 +8,9 @@
     "/tmp/20.10.sh"
 - name: Copy pushou script
   become: true
-  ansible.builtin.copy:
-    src: {{ item }}
-    dst: /tmp
-    owner: root
-    mode: "711"
-  loop:
-    - 1  
-    - Makefile  
-    - README.md  
-    - config  
-    - docker-compose.yml  
-    - etc  
-    - lib  
-    - scripts
-    - templates
-    - update.yaml
+  ansible.builtin.git:
+    src: https://github.com/pushou/siem.github
+    dst: .
 - name: install docker compose
   ansible.builtin.apt:
     name: docker-compose
@@ -31,8 +18,61 @@
 - name: run pushou scripts
   become: true
   ansible.builtin.shell:
-    "make {{ item }}"
-  loop:
-    - ES
-    - siem
-    - fleet
+    "make clean && make es && make siem && make fleet"
+
+
+    ###### GET ELASTIC PASS ######
+- name:
+
+- name: create api key
+  ansible.builtin.uri:
+    url: "https://{{ elastic_server }}:5601/_security/api_key"
+    user: elastic
+    password: "{{ elastic_pass }}"
+    method: POST
+    body: '{"name":"cute_api_key","expiration":7d}'
+    force_basic_auth: true
+    body_format: json
+    register: api_key
+
+- name: Create DC policy
+  ansible.builtin.uri:
+    url: "https://{{ elastic_server }}:5601/api/fleet/agent_policies?sys_monitoring=true"
+    user: elastic
+    password: "{{ elastic_pass }}"
+    method: POST
+    body: '{"name": "GOAD-DC","description": "","namespace": "default","monitoring_enabled": ["logs","metrics"]}'
+    force_basic_auth: true
+    body_format: json
+    headers: 
+      Accept: */*
+      Authorization: "ApiKey {{ api_key }}"
+      Cache-Control: no-cache
+      Connection: keep-alive
+      kbn-xsrf: xxx
+    register: dc_token
+- name: Create SRV policy
+  ansible.builtin.uri:
+    url: "https://{{ elastic_server }}:5601/api/fleet/agent_policies?sys_monitoring=true"
+    user: elastic
+    password: "{{ elastic_pass }}"
+    method: POST
+    body: '{"name": "GOAD-SRV","description": "","namespace": "default","monitoring_enabled": ["logs","metrics"]}'
+    force_basic_auth: true
+    body_format: json
+    headers: 
+      Accept: */*
+      Authorization: "ApiKey {{ api_key }}"
+      Cache-Control: no-cache
+      Connection: keep-alive
+      kbn-xsrf: xxx
+    register: srv_token
+- local_action:
+    module: copy
+    content: "{{ item.var }}"
+    dest: "{{ item.path }}" 
+    loop:
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/api_key","var":"{{ api_key['encoded'] }}"}
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/api_key","var":"{{ api_key['encoded']}}"}
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/id","var":"{{ dc_token['item']['id'] }}"}
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/id","var":"{{ srv_token['item']['id'] }}"}
