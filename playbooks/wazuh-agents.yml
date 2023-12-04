@@ -1,22 +1,5 @@
 ---
 - name: Deploy Wazuh Agents
-  hosts: SRV03
-
-  tasks:
-
-    - name: Install wazuh package
-      win_package:
-        path: https://packages.wazuh.com/4.x/windows/wazuh-agent-4.6.0-1.msi
-        product_id: Wazuh-agent
-        state: present
-        arguments:
-          - \q
-          - "WAZUH_MANAGER='{{ wazuh_server }}'"
-          - "WAZUH_REGISTRATION_SERVER='{{ wazuh_server }}'"
-          - WAZUH_AGENT_GROUP='default'
-
-    - name: Start wazuh service
-      ansible.windows.win_service:
-        name: WazuhSvc
-        start_mode: auto
-        state: started
+  hosts: windows
+  roles:
+    - wazuh-agent
