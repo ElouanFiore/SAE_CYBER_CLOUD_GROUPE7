@@ -9,7 +9,7 @@ admin:
   - "admin"
   description: "Demo admin user"
 kibanaserver:
-  hash: $2y$12$1oALgOMPn/dk6Yk.nLPiOOVJi4rRrEiIlEbcT7IFmdsqGwQ0DOnjS
+  hash: $2y$12$5HF/qytKQnFxIg6TcSJKReAehFjOiQKz8icGB2L89cyoEk526qvbm
   reserved: true
   description: "Demo kibanaserver user"
 kibanaro:

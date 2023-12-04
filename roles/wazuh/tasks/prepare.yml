@@ -16,6 +16,7 @@
     owner: root
     group: root
     mode: 0644
+    create: true
 
 - name: Put wazuh repos key
   become: yes
