@@ -1,5 +1,5 @@
 ---
 - name: Install elastic
-  hosts: localhost
+  hosts: elastic
   roles:
     - elastic-server

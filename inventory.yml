@@ -2,6 +2,7 @@ linux:
   hosts:
     open-wec:
     wazuh:
+    elastic:
 
 windows:
   children:
