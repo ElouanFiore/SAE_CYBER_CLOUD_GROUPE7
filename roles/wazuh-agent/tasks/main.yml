@@ -1,0 +1,24 @@
+- name: Download wazuh installer
+  ansible.windows.win_copy:
+    src: wazuh-agent-4.6.0-1.msi
+    dest: C:\Temp\
+
+- name: Install wazuh package
+  win_package:
+    path: C:\Temp\wazuh-agent-4.6.0-1.msi
+    state: present
+    arguments:
+      - "WAZUH_MANAGER={{ wazuh_server }}"
+      - "WAZUH_REGISTRATION_SERVER={{ wazuh_server }}"
+      - "WAZUH_AGENT_GROUP={{ wazuh_group }}"
+
+- name: Start wazuh service
+  ansible.windows.win_service:
+    name: WazuhSvc
+    start_mode: auto
+    state: started
+
+- name: Remove agent installer
+  ansible.windows.win_file:
+    path: C:\Temp\wazuh-agent-4.6.0-1.msi
+    state: absent
