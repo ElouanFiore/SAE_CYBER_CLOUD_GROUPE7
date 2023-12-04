@@ -11,6 +11,10 @@
   ansible.builtin.git:
     src: https://github.com/pushou/siem.github
     dst: .
+- name: copy kool script
+  ansible.builtin.copy:
+    src: get_es_passwd.py
+    dst: siem/get_es_passwd.py
 - name: install docker compose
   ansible.builtin.apt:
     name: docker-compose
@@ -19,12 +23,11 @@
   become: true
   ansible.builtin.shell:
     "make clean && make es && make siem && make fleet"
-
-
-    ###### GET ELASTIC PASS ######
-- name:
-
-- name: create api key
+- name: Get elastic password
+  ansible.builtin.shell:
+    '/siem/get_es_passwd.py'
+  register: elastic_pass
+-name: create api key
   ansible.builtin.uri:
     url: "https://{{ elastic_server }}:5601/_security/api_key"
     user: elastic
@@ -34,7 +37,6 @@
     force_basic_auth: true
     body_format: json
     register: api_key
-
 - name: Create DC policy
   ansible.builtin.uri:
     url: "https://{{ elastic_server }}:5601/api/fleet/agent_policies?sys_monitoring=true"
