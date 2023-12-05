@@ -3,17 +3,17 @@ _meta:
   type: "internalusers"
   config_version: 2
 admin:
-  hash: $2y$12$hpm/QSPkcPnqDbXMAxPPV.hwdYn227GK1NfnbzZ1WfQxA1O1vc4na
+  hash: $2a$12$wrQM9m8KV2fCzAQ748NnN.zeZEbUin2S5jyxLnxJKEmE5Bw0yEooK
   reserved: true
   backend_roles:
   - "admin"
   description: "Demo admin user"
 kibanaserver:
-  hash: $2y$12$5HF/qytKQnFxIg6TcSJKReAehFjOiQKz8icGB2L89cyoEk526qvbm
+  hash: $2a$12$wMLlPCDAkPyaUJJnMoO/lu0N969v78w9hiiVNd/7xK.UPk7EWVsfW
   reserved: true
   description: "Demo kibanaserver user"
 kibanaro:
-  hash: $2y$12$qGQDNOaKoZjvjGPKlNMDtOnX/FI0.MoGzudwwzVTqY3lgMY.YpEWm
+  hash: $2a$12$10X/agnE9u/mv5FflzHzvOUQd5gZTY73uZ4ci2S4aoAUAw8y72zqu
   reserved: false
   backend_roles:
   - "kibanauser"
@@ -24,19 +24,19 @@ kibanaro:
     attribute3: "value3"
   description: "Demo kibanaro user"
 logstash:
-  hash: $2y$12$r.i5OPCQyOWR7S2rmMUamet8VGu42IGw4LTW3Zawsp1u4IS46pR6G
+  hash: $2a$12$pctehs05yKfCB7tZs86pku5ERauNmEYISI8GnHcdPhaRJ9Lx4u9/i
   reserved: false
   backend_roles:
   - "logstash"
   description: "Demo logstash user"
 readall:
-  hash: $2y$12$mcj3r9j0460Q61VaLkg.TeYdzqyxa/G3MaFmD.QNfxRFEccgAkGfK
+  hash: $2a$12$xyZLerb73OibIMwHYFkaWuKI3vfEsKt97.p745YpZRA0wlB7hGKNm
   reserved: false
   backend_roles:
   - "readall"
   description: "Demo readall user"
 snapshotrestore:
-  hash: $2y$12$RPb2jebs4ba6Xx3kkLzblO.V.VB85pG.9HMtCF8dbMxzcmaz4AAbu
+  hash: $2a$12$BFw4cNo0VzHQt6GBCuUgf.AzCk/w7bq477.CQdVDLHwMzz0yV6dfC
   reserved: false
   backend_roles:
   - "snapshotrestore"

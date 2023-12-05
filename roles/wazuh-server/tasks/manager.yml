@@ -41,3 +41,35 @@
     owner: root
     group: root
   notify: restart-filbeat
+
+- name: Get wazuh filebeat template
+  become: yes
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/wazuh/wazuh/v4.7.0/extensions/elasticsearch/7.x/wazuh-template.json
+    dest: /etc/filebeat/wazuh-template.json
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart-filbeat
+
+- name: Get wazuh filebeat modules
+  become: yes
+  ansible.builtin.unarchive:
+    src: https://packages.wazuh.com/4.x/filebeat/wazuh-filebeat-0.3.tar.gz
+    dest: /usr/share/filebeat/module/
+    remote_src: yes
+  notify: restart-filbeat
+
+- name: Start wazuh-manager
+  become: yes
+  ansible.builtin.systemd_service:
+    name: wazuh-manager
+    state: started
+    enabled: true
+
+- name: Start filebeat
+  become: yes
+  ansible.builtin.systemd_service:
+    name: filebeat
+    state: started
+    enabled: true

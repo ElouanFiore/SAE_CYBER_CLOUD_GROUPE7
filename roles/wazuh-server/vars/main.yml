@@ -1,0 +1,6 @@
+admin_pwd: "admin"
+kibanaserver_pwd: "kibanaserver"
+kibanaro_pwd: "kibanaro"
+logstach_pwd: "logstach"
+readall_pwd: "readall"
+snapshotrestore_pwd: "snapshotrestore"

@@ -2,4 +2,4 @@
 - name: Instal wazuh
   hosts: wazuh
   roles:
-    - wazuh
+    - wazuh-server

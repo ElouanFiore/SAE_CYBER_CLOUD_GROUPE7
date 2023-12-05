@@ -7,3 +7,6 @@
 
 - import_tasks: dashboard.yml
   notify: restart-dashboard
+
+- import_tasks: after.yml
+  tags: after

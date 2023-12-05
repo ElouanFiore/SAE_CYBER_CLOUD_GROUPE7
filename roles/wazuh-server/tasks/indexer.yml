@@ -46,3 +46,14 @@
     mode: 0644
     owner: wazuh-indexer
     group: wazuh-indexer
+
+- name: Run init security script
+  become: yes
+  ansible.builtin.command: bash /usr/share/wazuh-indexer/bin/indexer-security-init.sh
+
+- name: Start wazuh-indexer
+  become: yes
+  ansible.builtin.systemd_service:
+    name: wazuh-indexer
+    state: started
+    enabled: true
