@@ -1,15 +1,7 @@
-- name: Get dc token
-  hosts: localhosts
-  connection: local
-  gather_facts: false
-  ansible.builtin.shell:
-    "python3  get_token.py {{ api_key }} {{ elastic_server }} {{ elastic_pass }} {{ id }}"
-  register: srv_token
-
 - name: Register fleet
   become: true
   ansible.windows.win_powershell:
     script: "$ProgressPreference = 'SilentlyContinue' 
       Invoke-WebRequest -Uri https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-8.9.0-windows-x86_64.zip -OutFile elastic-agent-8.9.0-windows-x86_64.zip 
       Expand-Archive .\elastic-agent-8.9.0-windows-x86_64.zip 
-      .\elastic-agent-8.9.0-windows-x86_64\elastic-agent.exe install --fleet-server-es=https://{{ elastic_server }}:9200 --fleet-server-service-token={{ srv_token }} --fleet-server-policy=fleet-server-policy --fleet-server-port=8220 --insecure"
+      .\elastic-agent-8.9.0-windows-x86_64\elastic-agent.exe install --fleet-server-es=https://{{ elastic_server }}:9200 --fleet-server-service-token={{ token }} --fleet-server-policy=fleet-server-policy --fleet-server-port=8220 --insecure"

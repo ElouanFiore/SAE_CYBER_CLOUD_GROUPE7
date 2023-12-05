@@ -1,80 +1,89 @@
-- name: Install docker script
-  ansible.builtin.get_url:
-    url: https://releases.rancher.com/install-docker/20.10.sh
-    dest: /tmp
-    mode: '0744'
-- name: Run docker script
-  ansible.builtin.command:
-    "/tmp/20.10.sh"
 - name: Copy pushou script
-  become: true
   ansible.builtin.git:
-    src: https://github.com/pushou/siem.github
-    dst: .
+    repo: 'https://github.com/pushou/siem.git'
+    dest: /root/test
+    force: true
 - name: copy kool script
   ansible.builtin.copy:
-    src: get_es_passwd.py
-    dst: siem/get_es_passwd.py
-- name: install docker compose
+    src: "{{ item }}"
+    dest: "/root/test/{{ item }}"
+    mode: '0777'
+  loop:
+    - get_es_passwd.py
+    - get_api_key.py
+    - create_dc_policy.py
+    - create_srv_policy.py
+- name: install docker compose and cmake
   ansible.builtin.apt:
-    name: docker-compose
+    name: "{{ item }}"
     state: present
-- name: run pushou scripts
+  loop:
+    - docker-compose
+    - cmake
+    - python3-pip
+- name: check pip modules
+  pip:
+    name: "{{ item }}"
+  loop:
+    - requests
+#- name: run pushou scripts
+#  become: true
+#  ansible.builtin.shell:
+#    "{{ item }}"
+#  args:
+#    chdir: /root/test
+#  loop:
+#    - "make clean"
+#    - "./scripts/lance-ES.sh"
+#    - "./scripts/lance-siem.sh"
+#    - "./scripts/lance-fleet.sh"
+- name: Get elastic password
   become: true
   ansible.builtin.shell:
-    "make clean && make es && make siem && make fleet"
-- name: Get elastic password
-  ansible.builtin.shell:
-    '/siem/get_es_passwd.py'
+    "./get_es_passwd.py"
+  args:
+    chdir: /root/test
   register: elastic_pass
--name: create api key
-  ansible.builtin.uri:
-    url: "https://{{ elastic_server }}:5601/_security/api_key"
-    user: elastic
-    password: "{{ elastic_pass }}"
-    method: POST
-    body: '{"name":"cute_api_key","expiration":7d}'
-    force_basic_auth: true
-    body_format: json
-    register: api_key
+- name: show passwd
+  debug:
+    msg: "ELS psswd=> {{ elastic_pass.stdout }} on host=> {{ elastic }}"
+- name: create api key
+  become: true
+  ansible.builtin.shell:
+    "./get_api_key.py {{ elastic_pass.stdout }} {{ elastic }}"
+  args:
+    chdir: /root/test
+  register: api_key
+- name: show api key
+  debug:
+    msg: "api_key => {{ api_key.stdout }}"
 - name: Create DC policy
-  ansible.builtin.uri:
-    url: "https://{{ elastic_server }}:5601/api/fleet/agent_policies?sys_monitoring=true"
-    user: elastic
-    password: "{{ elastic_pass }}"
-    method: POST
-    body: '{"name": "GOAD-DC","description": "","namespace": "default","monitoring_enabled": ["logs","metrics"]}'
-    force_basic_auth: true
-    body_format: json
-    headers: 
-      Accept: */*
-      Authorization: "ApiKey {{ api_key }}"
-      Cache-Control: no-cache
-      Connection: keep-alive
-      kbn-xsrf: xxx
-    register: dc_token
+  ansible.builtin.shell:
+    "./create_dc_policy.py {{ elastic_pass.stdout }} {{ api_key.stdout }} {{ elastic }}"
+  args:
+    chdir: /root/test
+  register: dc_token
 - name: Create SRV policy
-  ansible.builtin.uri:
-    url: "https://{{ elastic_server }}:5601/api/fleet/agent_policies?sys_monitoring=true"
-    user: elastic
-    password: "{{ elastic_pass }}"
-    method: POST
-    body: '{"name": "GOAD-SRV","description": "","namespace": "default","monitoring_enabled": ["logs","metrics"]}'
-    force_basic_auth: true
-    body_format: json
-    headers: 
-      Accept: */*
-      Authorization: "ApiKey {{ api_key }}"
-      Cache-Control: no-cache
-      Connection: keep-alive
-      kbn-xsrf: xxx
-    register: srv_token
+  ansible.builtin.shell:
+    "./create_srv_policy.py {{ elastic_pass.stdout }} {{ api_key.stdout }} {{ elastic }}"
+  args:
+    chdir: /root/test
+  register: srv_token
+- name: show srv token
+  debug:
+    msg: "srv token =>{{ srv_token.stdout }}"
+- name: show dc token
+  debug:  
+    msg: "dc token => {{ dc_token.stdout }}"
+- name: show api_key
+  debug:
+    msg: "api_key=>{{ api_key.stdout }}"
 - local_action:
     module: copy
     content: "{{ item.var }}"
     dest: "{{ item.path }}" 
-    loop:
-      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/api_key","var":"{{ api_key['encoded'] }}"}
-      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/api_key","var":"{{ api_key['encoded']}}"}
-      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/id","var":"{{ dc_token['item']['id'] }}"}
-      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/id","var":"{{ srv_token['item']['id'] }}"}
+  loop:
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/api_key","var":"{{ api_key.stdout }}"}
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/api_key","var":"{{ api_key.stdout }}"}
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/token","var":"{{ dc_token.stdout }}"}
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/token","var":"{{ srv_token.stdout }}"}
