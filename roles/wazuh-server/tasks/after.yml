@@ -1,0 +1,6 @@
+- name: Run agent groups
+  become: yes
+  ansible.builtin.command: "bash /var/ossec/bin/agent_groups -a -g {{ item }} -q"
+  loop:
+    - DomainController
+    - WindowsServer

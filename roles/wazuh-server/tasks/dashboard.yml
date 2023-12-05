@@ -41,3 +41,10 @@
     mode: 0640
     owner: wazuh-dashboard
     group: wazuh-dashboard
+
+- name: Start wazuh-dashboard
+  become: yes
+  ansible.builtin.systemd_service:
+    name: wazuh-dashboard
+    state: started
+    enabled: true

@@ -3,6 +3,7 @@ linux:
     open-wec:
     wazuh:
     elastic:
+    wireguard:
 
 windows:
   children:
