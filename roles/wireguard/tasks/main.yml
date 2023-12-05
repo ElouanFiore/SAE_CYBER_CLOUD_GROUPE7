@@ -1,0 +1,21 @@
+- name: Install wireguard package
+  become: yes
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+  loop:
+    - wireguard
+    - iptables
+
+- name: Copy server conf
+  become: yes
+  ansible.builtin.copy:
+    src: serv.conf
+    dest: /etc/wireguard/grp7.conf
+
+- name: Start wg service
+  ansible.builtin.systemd_service:
+    name: wg-quick@grp7
+    state: started
+    enabled: true
