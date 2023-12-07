@@ -15,7 +15,7 @@
     dest: /etc/wireguard/grp7.conf
 
 - name: Start wg service
-  ansible.builtin.systemd_service:
+  ansible.builtin.systemd:
     name: wg-quick@grp7
     state: started
     enabled: true

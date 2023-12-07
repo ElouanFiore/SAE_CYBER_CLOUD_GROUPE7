@@ -1,3 +1,7 @@
+- name : add dir
+  ansible.builtin.file:
+    path: /root/test
+    state: directory
 - name: Copy pushou script
   ansible.builtin.git:
     repo: 'https://github.com/pushou/siem.git'
@@ -13,6 +17,8 @@
     - get_api_key.py
     - create_dc_policy.py
     - create_srv_policy.py
+    - get_dc_token.py
+    - get_srv_token.py
 - name: install docker compose and cmake
   ansible.builtin.apt:
     name: "{{ item }}"
@@ -21,22 +27,23 @@
     - docker-compose
     - cmake
     - python3-pip
+    - jq
 - name: check pip modules
   pip:
     name: "{{ item }}"
   loop:
     - requests
-#- name: run pushou scripts
-#  become: true
-#  ansible.builtin.shell:
-#    "{{ item }}"
-#  args:
-#    chdir: /root/test
-#  loop:
-#    - "make clean"
-#    - "./scripts/lance-ES.sh"
-#    - "./scripts/lance-siem.sh"
-#    - "./scripts/lance-fleet.sh"
+- name: run pushou scripts
+  become: true
+  ansible.builtin.shell:
+    "{{ item }}"
+  args:
+    chdir: /root/test
+  loop:
+    - "make clean"
+    - "./scripts/lance-ES.sh"
+    - "./scripts/lance-siem.sh"
+    - "./scripts/lance-fleet.sh"
 - name: Get elastic password
   become: true
   ansible.builtin.shell:
@@ -69,20 +76,35 @@
   args:
     chdir: /root/test
   register: srv_token
+- name: show api_key
+  debug:
+    msg: "api_key=>{{ api_key.stdout }}"
+- name: get dc token
+  shell:
+    "./get_dc_token.py {{ api_key.stdout }} {{ elastic }} {{ elastic_pass.stdout }}"
+  args:
+    chdir: /root/test
+  register: dc_token
+- name: get srv token
+  shell:
+    "python3 get_srv_token.py {{ api_key.stdout }} {{ elastic }} {{ elastic_pass.stdout }}"
+  args:
+    chdir: /root/test
+  register: srv_token
 - name: show srv token
   debug:
     msg: "srv token =>{{ srv_token.stdout }}"
 - name: show dc token
   debug:  
     msg: "dc token => {{ dc_token.stdout }}"
-- name: show api_key
-  debug:
-    msg: "api_key=>{{ api_key.stdout }}"
+
 - local_action:
     module: copy
     content: "{{ item.var }}"
     dest: "{{ item.path }}" 
   loop:
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/elastic_passwd","var":"{{ elastic_pass.stdout }}"}
+      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/elastic_passwd","var":"{{ elastic_pass.stdout }}"}
       - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/api_key","var":"{{ api_key.stdout }}"}
       - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/api_key","var":"{{ api_key.stdout }}"}
       - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/token","var":"{{ dc_token.stdout }}"}
