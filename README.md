@@ -5,14 +5,15 @@
 - Elouan
 
 # Annexe
-1. [ ] GOAD Proxmox
-2. [ ] Accès VPN
-3. [x] [open-wec](CR/openwec.md)
-    - [x] [WEF](CR/wef.md)
-    - [ ] [Audit](CR/audit.md)
-4. [ ] Wazuh
-    - [ ] Installation agent par groupe (DC/Servers)
-5. [ ] Elastic
-6. [ ] Attaques
-    - [ ] Rapport
-7. T-pot 
+1. [ ] GOAD Proxmox                                     (Manuel)
+2. [ ] Accès VPN                                        (Automatisé)
+3. [x] [open-wec](CR/openwec.md)                        (Automatisé)
+    - [x] [WEF](CR/wef.md)                              (Automatisé)
+    - [ ] [Audit](CR/audit.md)                          (Automatisé)
+4. [ ] Wazuh                                            (Automatisé)
+    - [ ] Installation agent par groupe (DC/Servers)    (Automatisé)
+5. [ ] Elastic                                          (Automatisé)
+6. [ ] Versioning Git                                   (N/A)
+7. [ ] Attaques                                         (Manuel)
+    - [ ] Rapport                                       (N/A)
+8. [ ] T-pot                                            (N/A)
