@@ -8,7 +8,7 @@ headers={"Content-Type":"application/json",
         "Cache-Control":"no-cache",
         "Connection":"keep-alive",
         "kbn-xsrf":"xxx"}
-data='{"name": "GOAD-DC"}'
+data='{"name": "GOAD-DC2","id":"GOAD-DC2","description": "","namespace": "default","monitoring_enabled": ["logs", "metrics"]}'
 auth=("elastic",sys.argv[1])
-r=requests.post(f"https://{sys.argv[3]}:9200/_security/api_key?pretty",auth=auth,headers=headers,data=data,verify=False)
-print(json.loads(r.content.decode())["encoded"])
+r=requests.post(f"https://{sys.argv[3]}:5601/api/fleet/agent_policies?sys_monitoring=true",auth=auth,headers=headers,data=data,verify=False)
+print(r.content.decode())

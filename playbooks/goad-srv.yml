@@ -1,5 +1,5 @@
 ---
 - name: srv join fleet
-  hosts: localhost
+  hosts: SRV02 SRV03
   roles:
     - GOAD-SRV

@@ -1,5 +1,5 @@
 ---
 - name: srv join fleet
-  hosts: localhost
+  hosts: DC01 DC02 DC03
   roles:
     - GOAD-DC

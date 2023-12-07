@@ -1,12 +1,34 @@
-- name: Get srv token
-  hosts: localhosts
-  connection: local
-  gather_facts: false
-  ansible.builtin.shell:
-    "python3  get_token.py {{ api_key }} {{ elastic_server }} {{ elastic_pass }} {{ id }}"
-  register: srv_token
-
-- name: Register fleet
-  become: true
+- name: check agent
+  win_stat: 
+    path: "elastic-agent-8.9.0-windows-x86_64.zip"
+  register: stat_file
+- name: Get ansible agent
   ansible.windows.win_powershell:
-    script: "script donné par ES {{ srv_token }}"
+    script: "Invoke-WebRequest -Uri https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-8.9.0-windows-x86_64.zip -OutFile elastic-agent-8.9.0-windows-x86_64.zip"
+  when: stat_file.stat.exists == False
+
+- name: debug
+  ansible.windows.win_powershell:
+    script: "dir"
+- name: wait for download
+  ansible.windows.win_wait_for:
+    path: elastic-agent-8.9.0-windows-x86_64.zip
+  when: stat_file.stat.exists == False
+- name: check if agent is here
+  win_stat: 
+    path: .\elastic-agent-8.9.0-windows-x86_64.zip
+  register: stat_file
+- name: show stat_file
+  debug:
+    msg: "stat_file => {{ stat_file }}"
+- name: Expand agent
+  community.windows.win_unzip:
+    src: "elastic-agent-8.9.0-windows-x86_64.zip"
+    dest: .
+
+- name: Run agent
+  ansible.windows.win_powershell:
+    script:
+      "C:\\Users\\vagrant\\elastic-agent-8.9.0-windows-x86_64\\elastic-agent.exe install --url=https://{{ elastic }}:8220 --enrollment-token={{ token }}"
+    chdir: .\elastic-agent
+  when: stat_file.stat.exists == True

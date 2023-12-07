@@ -1,3 +1,2 @@
 ---
-id: "{{ lookup('file', 'id') }}"
-api_key: "{{ lookup('file', 'api_key') }}"
+token: "{{ lookup('file', 'token') }}"
