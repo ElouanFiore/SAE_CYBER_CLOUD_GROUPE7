@@ -1,0 +1,19 @@
+---
+- name: Configure Audit policy on Windows
+  hosts: windows
+
+  tasks:
+  - name: Enable failure auditing types for all category
+    community.windows.win_audit_policy_system:
+      category: "{{ item }}"
+      audit_type: failure
+    loop:
+      - Account Logon
+      - Account Management
+      - Detailed Tracking
+      - DS Access
+      - Logon/Logoff
+      - Object Access
+      - Policy Change
+      - Privilege Use
+      - System
