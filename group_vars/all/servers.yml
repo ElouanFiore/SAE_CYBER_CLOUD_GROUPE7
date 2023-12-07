@@ -1,3 +1,3 @@
 ---
-wazuh_server: wazuh.sevenkingdoms.local
+wazuh_server: 192.168.10.31
 openwec_address: 192.168.10.30
