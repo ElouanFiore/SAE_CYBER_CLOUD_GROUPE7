@@ -1,0 +1,32 @@
+---
+- name: Configure windows event forwarding
+  hosts: windows
+
+  tasks:
+    - name: Add SubscriptionManager reg key
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding\SubscriptionManager
+        name: 1
+        data: Server=http://open-wec.sevenkingdoms.local:5985/test,Refresh=30
+        type: string
+
+    - name: Add MaxForwardingRate reg key
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\EventForwarding
+        name: MaxForwardingRate
+        data: 100
+        type: dword
+
+    - name: Add ChannelAccess reg key
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\EventLog\Security
+        name: ChannelAccess
+        data: (A;;0xf0005;;;SY)(A;;0x5;;;BA)(A;;0x1;;;S-1-5-32-573)(A;;0x1;;;NS)
+        type: string
+
+    - name: Add Event Log Readers
+      ansible.windows.win_group_membership:
+        name: 'Event Log Readers'
+        members:
+        - "NETWORK SERVICE"
+        state: present
