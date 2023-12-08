@@ -33,7 +33,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 #### Lucas
 - Perfection sur l'utilisation de firewall (régles NAT, VPN, VLANs)
 - Logs suricata IPS
-- 
+- Utilisation d'users avec token sur proxmox
 
 #### Antoine
 - 
