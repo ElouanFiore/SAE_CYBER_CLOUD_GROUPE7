@@ -1,0 +1,298 @@
+From 0404956ba2259de83f433393a1f15302307759ca Mon Sep 17 00:00:00 2001
+From: root <root@iutbeziers.fr>
+Date: Tue, 5 Dec 2023 16:05:15 +0100
+Subject: [PATCH] elastic samarch
+
+---
+ roles/GOAD-DC/files/api_key                   |   1 +
+ roles/GOAD-DC/files/id                        |   1 +
+ roles/GOAD-DC/files/token                     |   1 +
+ roles/GOAD-DC/tasks/main.yaml                 |  10 +-
+ .../elastic-server/files/create_dc_policy.py  |  14 ++
+ .../elastic-server/files/create_srv_policy.py |  14 ++
+ roles/elastic-server/files/get_api_key.py     |  10 ++
+ roles/elastic-server/files/get_es_passwd.py   |   3 +-
+ roles/elastic-server/tasks/main.yaml          | 139 ++++++++++--------
+ 9 files changed, 117 insertions(+), 76 deletions(-)
+ create mode 100644 roles/GOAD-DC/files/api_key
+ create mode 100644 roles/GOAD-DC/files/id
+ create mode 100644 roles/GOAD-DC/files/token
+ create mode 100644 roles/elastic-server/files/create_dc_policy.py
+ create mode 100644 roles/elastic-server/files/create_srv_policy.py
+ create mode 100644 roles/elastic-server/files/get_api_key.py
+
+diff --git a/roles/GOAD-DC/files/api_key b/roles/GOAD-DC/files/api_key
+new file mode 100644
+index 0000000..38032ff
+--- /dev/null
++++ b/roles/GOAD-DC/files/api_key
+@@ -0,0 +1 @@
++WWdkLU9vd0JFbmd2WldrcHFsVFM6UHdqWnc4N2tTdnlvTC1BMWprNzljdw==
+\ No newline at end of file
+diff --git a/roles/GOAD-DC/files/id b/roles/GOAD-DC/files/id
+new file mode 100644
+index 0000000..33ca709
+--- /dev/null
++++ b/roles/GOAD-DC/files/id
+@@ -0,0 +1 @@
++{"cmd": "./create_dc_policy.py KWAI8b_ZT9fnnTqdhyZ= WEFkOU9vd0JFbmd2WldrcEJGUnc6c2pNbjAtYktSUkNfNHlnOEdlWEtaZw== 192.168.10.32", "stdout": "WGdkOU9vd0JFbmd2WldrcEJsVEQ6MGctWE45NHZTNHFTTldTTjZHWnZudw==", "stderr": "/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1015: InsecureRequestWarning: Unverified HTTPS request is being made to host '192.168.10.32'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings\n  warnings.warn(", "rc": 0, "start": "2023-12-05 15:58:41.397019", "end": "2023-12-05 15:58:42.178933", "delta": "0:00:00.781914", "changed": true, "stdout_lines": ["WGdkOU9vd0JFbmd2WldrcEJsVEQ6MGctWE45NHZTNHFTTldTTjZHWnZudw=="], "stderr_lines": ["/usr/lib/python3/dist-packages/urllib3/connectionpool.py:1015: InsecureRequestWarning: Unverified HTTPS request is being made to host '192.168.10.32'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings", "  warnings.warn("], "failed": false}
+\ No newline at end of file
+diff --git a/roles/GOAD-DC/files/token b/roles/GOAD-DC/files/token
+new file mode 100644
+index 0000000..9f6b6c5
+--- /dev/null
++++ b/roles/GOAD-DC/files/token
+@@ -0,0 +1 @@
++WkFkLU9vd0JFbmd2WldrcHJGUzg6MWRSdHNvZjFSc0tMbk5mamJDakdaZw==
+\ No newline at end of file
+diff --git a/roles/GOAD-DC/tasks/main.yaml b/roles/GOAD-DC/tasks/main.yaml
+index bea10ce..bfa78f9 100644
+--- a/roles/GOAD-DC/tasks/main.yaml
++++ b/roles/GOAD-DC/tasks/main.yaml
+@@ -1,15 +1,7 @@
+-- name: Get dc token
+-  hosts: localhosts
+-  connection: local
+-  gather_facts: false
+-  ansible.builtin.shell:
+-    "python3  get_token.py {{ api_key }} {{ elastic_server }} {{ elastic_pass }} {{ id }}"
+-  register: srv_token
+-
+ - name: Register fleet
+   become: true
+   ansible.windows.win_powershell:
+     script: "$ProgressPreference = 'SilentlyContinue' 
+       Invoke-WebRequest -Uri https://artifacts.elastic.co/downloads/beats/elastic-agent/elastic-agent-8.9.0-windows-x86_64.zip -OutFile elastic-agent-8.9.0-windows-x86_64.zip 
+       Expand-Archive .\elastic-agent-8.9.0-windows-x86_64.zip 
+-      .\elastic-agent-8.9.0-windows-x86_64\elastic-agent.exe install --fleet-server-es=https://{{ elastic_server }}:9200 --fleet-server-service-token={{ srv_token }} --fleet-server-policy=fleet-server-policy --fleet-server-port=8220 --insecure"
++      .\elastic-agent-8.9.0-windows-x86_64\elastic-agent.exe install --fleet-server-es=https://{{ elastic_server }}:9200 --fleet-server-service-token={{ token }} --fleet-server-policy=fleet-server-policy --fleet-server-port=8220 --insecure"
+diff --git a/roles/elastic-server/files/create_dc_policy.py b/roles/elastic-server/files/create_dc_policy.py
+new file mode 100644
+index 0000000..420f807
+--- /dev/null
++++ b/roles/elastic-server/files/create_dc_policy.py
+@@ -0,0 +1,14 @@
++#!/bin/python3
++import requests
++import sys
++import json
++headers={"Content-Type":"application/json",
++        "Accept":"*/*",
++        "Authorization":f"ApiKey {sys.argv[2]}",
++        "Cache-Control":"no-cache",
++        "Connection":"keep-alive",
++        "kbn-xsrf":"xxx"}
++data='{"name": "GOAD-DC"}'
++auth=("elastic",sys.argv[1])
++r=requests.post(f"https://{sys.argv[3]}:9200/_security/api_key?pretty",auth=auth,headers=headers,data=data,verify=False)
++print(json.loads(r.content.decode())["encoded"])
+diff --git a/roles/elastic-server/files/create_srv_policy.py b/roles/elastic-server/files/create_srv_policy.py
+new file mode 100644
+index 0000000..4a11f00
+--- /dev/null
++++ b/roles/elastic-server/files/create_srv_policy.py
+@@ -0,0 +1,14 @@
++#!/bin/python3
++import requests
++import sys
++import json
++headers={"Content-Type":"application/json",
++        "Accept":"*/*",
++        "Authorization":f"ApiKey {sys.argv[2]}",
++        "Cache-Control":"no-cache",
++        "Connection":"keep-alive",
++        "kbn-xsrf":"xxx"}
++data='{"name": "GOAD-SRV"}'
++auth=("elastic",sys.argv[1])
++r=requests.post(f"https://{sys.argv[3]}:9200/_security/api_key?pretty",auth=auth,headers=headers,data=data,verify=False)
++print(json.loads(r.content.decode())["encoded"])
+diff --git a/roles/elastic-server/files/get_api_key.py b/roles/elastic-server/files/get_api_key.py
+new file mode 100644
+index 0000000..940446c
+--- /dev/null
++++ b/roles/elastic-server/files/get_api_key.py
+@@ -0,0 +1,10 @@
++#!/bin/python3
++import json
++import requests
++import sys
++
++headers={"Content-Type":"application/json"}
++data='{"name":"cute-api-key","expiration":"7d"}'
++auth=("elastic",sys.argv[1])
++r=requests.post(f"https://{sys.argv[2]}:9200/_security/api_key?pretty",auth=auth,headers=headers,data=data,verify=False)
++print(json.loads(r.content.decode())["encoded"])
+diff --git a/roles/elastic-server/files/get_es_passwd.py b/roles/elastic-server/files/get_es_passwd.py
+index cf6d65a..2f2f0e8 100755
+--- a/roles/elastic-server/files/get_es_passwd.py
++++ b/roles/elastic-server/files/get_es_passwd.py
+@@ -1,6 +1,5 @@
+ #!/bin/python3
+ import subprocess
+ 
+-a=subprocess.check_output(["make","pass"]).decode().split("\n")[1].split("=")[1][1:]
+-a=a[:len(a)-2]
++a=subprocess.check_output(["make","pass"]).decode().split("\n")[1].split(" ")[2]
+ print(a)
+diff --git a/roles/elastic-server/tasks/main.yaml b/roles/elastic-server/tasks/main.yaml
+index 03d7282..fc19df8 100644
+--- a/roles/elastic-server/tasks/main.yaml
++++ b/roles/elastic-server/tasks/main.yaml
+@@ -1,80 +1,89 @@
+-- name: Install docker script
+-  ansible.builtin.get_url:
+-    url: https://releases.rancher.com/install-docker/20.10.sh
+-    dest: /tmp
+-    mode: '0744'
+-- name: Run docker script
+-  ansible.builtin.command:
+-    "/tmp/20.10.sh"
+ - name: Copy pushou script
+-  become: true
+   ansible.builtin.git:
+-    src: https://github.com/pushou/siem.github
+-    dst: .
++    repo: 'https://github.com/pushou/siem.git'
++    dest: /root/test
++    force: true
+ - name: copy kool script
+   ansible.builtin.copy:
+-    src: get_es_passwd.py
+-    dst: siem/get_es_passwd.py
+-- name: install docker compose
++    src: "{{ item }}"
++    dest: "/root/test/{{ item }}"
++    mode: '0777'
++  loop:
++    - get_es_passwd.py
++    - get_api_key.py
++    - create_dc_policy.py
++    - create_srv_policy.py
++- name: install docker compose and cmake
+   ansible.builtin.apt:
+-    name: docker-compose
++    name: "{{ item }}"
+     state: present
+-- name: run pushou scripts
+-  become: true
+-  ansible.builtin.shell:
+-    "make clean && make es && make siem && make fleet"
++  loop:
++    - docker-compose
++    - cmake
++    - python3-pip
++- name: check pip modules
++  pip:
++    name: "{{ item }}"
++  loop:
++    - requests
++#- name: run pushou scripts
++#  become: true
++#  ansible.builtin.shell:
++#    "{{ item }}"
++#  args:
++#    chdir: /root/test
++#  loop:
++#    - "make clean"
++#    - "./scripts/lance-ES.sh"
++#    - "./scripts/lance-siem.sh"
++#    - "./scripts/lance-fleet.sh"
+ - name: Get elastic password
++  become: true
+   ansible.builtin.shell:
+-    '/siem/get_es_passwd.py'
++    "./get_es_passwd.py"
++  args:
++    chdir: /root/test
+   register: elastic_pass
+--name: create api key
+-  ansible.builtin.uri:
+-    url: "https://{{ elastic_server }}:5601/_security/api_key"
+-    user: elastic
+-    password: "{{ elastic_pass }}"
+-    method: POST
+-    body: '{"name":"cute_api_key","expiration":7d}'
+-    force_basic_auth: true
+-    body_format: json
+-    register: api_key
++- name: show passwd
++  debug:
++    msg: "ELS psswd=> {{ elastic_pass.stdout }} on host=> {{ elastic }}"
++- name: create api key
++  become: true
++  ansible.builtin.shell:
++    "./get_api_key.py {{ elastic_pass.stdout }} {{ elastic }}"
++  args:
++    chdir: /root/test
++  register: api_key
++- name: show api key
++  debug:
++    msg: "api_key => {{ api_key.stdout }}"
+ - name: Create DC policy
+-  ansible.builtin.uri:
+-    url: "https://{{ elastic_server }}:5601/api/fleet/agent_policies?sys_monitoring=true"
+-    user: elastic
+-    password: "{{ elastic_pass }}"
+-    method: POST
+-    body: '{"name": "GOAD-DC","description": "","namespace": "default","monitoring_enabled": ["logs","metrics"]}'
+-    force_basic_auth: true
+-    body_format: json
+-    headers: 
+-      Accept: */*
+-      Authorization: "ApiKey {{ api_key }}"
+-      Cache-Control: no-cache
+-      Connection: keep-alive
+-      kbn-xsrf: xxx
+-    register: dc_token
++  ansible.builtin.shell:
++    "./create_dc_policy.py {{ elastic_pass.stdout }} {{ api_key.stdout }} {{ elastic }}"
++  args:
++    chdir: /root/test
++  register: dc_token
+ - name: Create SRV policy
+-  ansible.builtin.uri:
+-    url: "https://{{ elastic_server }}:5601/api/fleet/agent_policies?sys_monitoring=true"
+-    user: elastic
+-    password: "{{ elastic_pass }}"
+-    method: POST
+-    body: '{"name": "GOAD-SRV","description": "","namespace": "default","monitoring_enabled": ["logs","metrics"]}'
+-    force_basic_auth: true
+-    body_format: json
+-    headers: 
+-      Accept: */*
+-      Authorization: "ApiKey {{ api_key }}"
+-      Cache-Control: no-cache
+-      Connection: keep-alive
+-      kbn-xsrf: xxx
+-    register: srv_token
++  ansible.builtin.shell:
++    "./create_srv_policy.py {{ elastic_pass.stdout }} {{ api_key.stdout }} {{ elastic }}"
++  args:
++    chdir: /root/test
++  register: srv_token
++- name: show srv token
++  debug:
++    msg: "srv token =>{{ srv_token.stdout }}" 
++- name: show dc token
++  debug:  
++    msg: "dc token => {{ dc_token.stdout }}"
++- name: show api_key
++  debug:
++    msg: "api_key=>{{ api_key.stdout }}"
+ - local_action:
+     module: copy
+     content: "{{ item.var }}"
+     dest: "{{ item.path }}" 
+-    loop:
+-      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/api_key","var":"{{ api_key['encoded'] }}"}
+-      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/api_key","var":"{{ api_key['encoded']}}"}
+-      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/id","var":"{{ dc_token['item']['id'] }}"}
+-      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/id","var":"{{ srv_token['item']['id'] }}"}
++  loop:
++      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/api_key","var":"{{ api_key.stdout }}"}
++      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/api_key","var":"{{ api_key.stdout }}"}
++      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-DC/files/token","var":"{{ dc_token.stdout }}"}
++      - {"path":"~/SAE_CYBER_CLOUD_GROUPE7/roles/GOAD-SRV/files/token","var":"{{ srv_token.stdout }}"}
+-- 
+2.30.2
+
