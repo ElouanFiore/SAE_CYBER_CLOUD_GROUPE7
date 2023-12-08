@@ -3,7 +3,7 @@ import json
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Chemin vers votre fichier eve.json
+# Chemin vers notre fichier eve.json
 chemin_fichier = '/var/log/suricata/eve.json'
 
 # Charger le fichier JSON ligne par ligne dans une liste
