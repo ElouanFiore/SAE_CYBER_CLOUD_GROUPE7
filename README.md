@@ -1,12 +1,14 @@
-# Synthèse
+# SAE CYBER CLOUD GROUPE 7
+
+## Synthèse
 - Global
 - Lucas
 - Antoine
 - Elouan
 
-# Annexe
+## Annexe
 - [ ] GOAD Proxmox (Manuel)
-- [ ] Accès VPN (Automatisé)
+- [x] [Accès VPN](CR/vpn.md) (Automatisé)
 - [x] [open-wec](CR/openwec.md) (Automatisé)
 	- [x] [WEF](CR/wef.md) (Automatisé)
 	- [x] [Audit](CR/audit.md) (Automatisé)

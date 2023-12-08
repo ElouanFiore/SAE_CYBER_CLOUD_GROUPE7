@@ -1,0 +1,25 @@
+# Accès wireguard
+
+Pour les attaques et la mise en place via ansible nous avons choisis de mettre en place des accès vpn wireguard via un VM qui a une interface dans le réseau GOAD et une interface dans le réseau de la salle. La VM est configurée automatiquement par un simple [playbook ansible](../roles/wireguard/tasks/main.yml) que l'on peut relancer à tout moment pour appliquer une nouvelle configuration avec un nouveau client.
+```bash
+ansible-playbook playbooks/install-wg.yml
+```
+
+## Configuration
+
+```bash
+[Interface]
+Address = 172.16.0.1/16
+ListenPort = 51820
+PrivateKey = yGB1f297rNC4aPfVjauq/W76FPK8KycRnV6cZZaf4Ew=
+PostUp = iptables -A FORWARD -i grp7 -j ACCEPT; iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE; sysctl net.ipv4.ip_forward=1
+PostDown = iptables -D FORWARD -i grp7 -j ACCEPT; iptables -t nat -D POSTROUTING -o ens18 -j MASQUERADE; sysctl net.ipv4.ip_forward=0
+
+[Peer]
+PublicKey = NIen9qzn1o9HuPcVXZXCWO/kHsn8wmyQ1qSe2ZBpFWQ=
+AllowedIPs = 172.16.0.2/32
+
+[Peer]
+PublicKey = P8Tots5R8CNa3P7g5h+TzyTBjfM2CIlJwlxUyqfBym8=
+AllowedIPs = 172.16.0.3/32
+```
