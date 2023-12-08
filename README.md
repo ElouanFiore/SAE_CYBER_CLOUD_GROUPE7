@@ -6,7 +6,8 @@
 Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous avons d'abord déployé un GOAD sur virtualbox en attendant de pouvoir le faire sur proxmox. Nous avons aussi fait une PoC de l'automatisation de l'installation pour qu'une fois que le proxmox est disponible on ai juste nos script ansible à lancer.
 
 #### Lucas
-- 
+- Deployment GOAD Proxmox
+- Scripts Python Suricata
 
 #### Antoine
 - 
