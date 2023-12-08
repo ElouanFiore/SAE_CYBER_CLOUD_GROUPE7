@@ -31,6 +31,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 ### Ce qu'on a appris
 
 #### Lucas
+- Perfection sur l'utilisation de firewall (régles NAT, VPN, VLANs)
 - 
 
 #### Antoine
