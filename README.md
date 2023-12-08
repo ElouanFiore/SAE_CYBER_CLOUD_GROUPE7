@@ -19,7 +19,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 ### Nos blocages
 
 #### Lucas
-- 
+- Attribuition de domain child sur les machines windows via Ansible (aprés j'ai reussi)
 
 #### Antoine
 - 
@@ -32,6 +32,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 
 #### Lucas
 - Perfection sur l'utilisation de firewall (régles NAT, VPN, VLANs)
+- Logs suricata IPS
 - 
 
 #### Antoine
