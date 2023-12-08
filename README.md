@@ -6,7 +6,8 @@
 Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous avons d'abord déployé un GOAD sur virtualbox en attendant de pouvoir le faire sur proxmox. Nous avons aussi fait une PoC de l'automatisation de l'installation pour qu'une fois que le proxmox est disponible on ai juste nos script ansible à lancer.
 
 #### Lucas
-- 
+- Deployment GOAD Proxmox
+- Scripts Python Suricata
 
 #### Antoine
 - 
@@ -20,7 +21,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 ### Nos blocages
 
 #### Lucas
-- 
+- Attribuition de domain child sur les machines windows via Ansible (aprés j'ai reussi)
 
 #### Antoine
 - 
@@ -32,7 +33,10 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 ### Ce qu'on a appris
 
 #### Lucas
-- 
+- Perfection sur l'utilisation de firewall (régles NAT, VPN, VLANs)
+- Logs suricata IPS
+- Utilisation d'users avec token sur proxmox
+- Bonne connaissance sur infrastructures virtualisés (schematisation, deployment)
 
 #### Antoine
 - 
@@ -43,7 +47,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 - Perfection de git
 
 ## Annexes
-- [ ] GOAD Proxmox (Manuel)
+- [x] [GOAD Proxmox](CR/goad_proxmox.pdf)(Manuel)
 - [x] [Accès VPN](CR/vpn.md) (Automatisé)
 - [ ] Suricata (Manuel)
 - [x] [Sysmon](CR/sysmon.md) (Automatisé)
