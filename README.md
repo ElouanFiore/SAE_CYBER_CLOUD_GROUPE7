@@ -46,7 +46,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 
 
 ## Annexes
-- [ ] GOAD Proxmox (Manuel)
+- [x] GOAD Proxmox (CR/GOAD_Proxmox.pdf)(Manuel)
 - [x] [Accès VPN](CR/vpn.md) (Automatisé)
 - [ ] Suricata (Manuel)
 - [x] [Sysmon](CR/sysmon.md) (Automatisé)
