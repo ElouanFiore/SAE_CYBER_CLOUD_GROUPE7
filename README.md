@@ -1,10 +1,45 @@
 # SAE CYBER CLOUD GROUPE 7
 
 ## Synthèses
-- Global
-- Lucas
-- Antoine
-- Elouan
+
+### Organisation
+Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous avons d'abord déployé un GOAD sur virtualbox en attendant de pouvoir le faire sur proxmox. Nous avons aussi fait une PoC de l'automatisation de l'installation pour qu'une fois que le proxmox est disponible on ai juste nos script ansible à lancer.
+
+#### Lucas
+- 
+
+#### Antoine
+- 
+
+#### Elouan
+- open-wec
+- wazuh
+
+### Nos blocages
+
+#### Lucas
+- 
+
+#### Antoine
+- 
+
+#### Elouan
+- Génération d'un SPN pour open-wec
+- 
+
+### Ce qu'on a appris
+
+#### Lucas
+- 
+
+#### Antoine
+- 
+
+#### Elouan
+- L'utilisation d'un AD (domaine enfant, relation entre forêt, GPO)
+- Utilisattion des rôles ansible
+- Perfection de git 
+
 
 ## Annexes
 - [ ] GOAD Proxmox (Manuel)
@@ -15,11 +50,10 @@
 - [x] [open-wec](CR/openwec.md) (Automatisé)
 	- [x] [WEF](CR/wef.md) (Automatisé)
 - [x] [Wazuh](CR/wazuh.md) (Automatisé)
-	- [ ] [Installation agent par groupe DC/Servers](CR/wazuh-agent.md) (Automatisé)
+	- [x] [Installation agent par groupe DC/Servers](CR/wazuh-agent.md) (Automatisé)
 - [ ] Elastic (Automatisé)
 	- [ ] Elastic Agent (Automatisé)
 - [ ] Splunk (Manuel)
 - [x] [Versioning Git](CR/git.md)
 - [ ] Attaques (Manuel)
 	- [ ] Rapport
-- [ ] T-pot
