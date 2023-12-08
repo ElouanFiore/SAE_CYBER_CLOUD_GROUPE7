@@ -5,15 +5,15 @@
   tasks:
   - name: Enable failure auditing types for all category
     community.windows.win_audit_policy_system:
-      category: "{{ item }}"
-      audit_type: failure
+      category: "{{ item.name }}"
+      audit_type: "{{ item.type }}"
     loop:
-      - Account Logon
-      - Account Management
-      - Detailed Tracking
-      - DS Access
-      - Logon/Logoff
-      - Object Access
-      - Policy Change
-      - Privilege Use
-      - System
+      - { name: 'Account Logon',      type: 'success, failure' }
+      - { name: 'Account Management', type: 'success, failure' }
+      - { name: 'Detailed Tracking',  type: 'success, failure' }
+      - { name: 'DS Access',          type: 'success, failure' }
+      - { name: 'Logon/Logoff',       type: 'success, failure' }
+      - { name: 'Object Access',      type: 'none' }
+      - { name: 'Policy Change',      type: 'success, failure' }
+      - { name: 'Privilege Use',      type: 'none' }
+      - { name: 'System',             type: 'success, failure' }
