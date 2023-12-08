@@ -15,7 +15,8 @@
 - [ ] Wazuh (Automatisé)
 	- [ ] Installation agent par groupe DC/Servers (Automatisé)
 - [ ] Elastic (Automatisé)
-- [ ] Versioning Git
+- [ ] Splunk (Manuel)
+- [x] [Versioning Git](CR/git.md)
 - [ ] Attaques (Manuel)
 	- [ ] Rapport
 - [ ] T-pot
