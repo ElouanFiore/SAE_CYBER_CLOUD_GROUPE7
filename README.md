@@ -1,6 +1,6 @@
 # SAE CYBER CLOUD GROUPE 7
 
-## Synthèses
+## Synthèse
 
 ### Organisation
 Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous avons d'abord déployé un GOAD sur virtualbox en attendant de pouvoir le faire sur proxmox. Nous avons aussi fait une PoC de l'automatisation de l'installation pour qu'une fois que le proxmox est disponible on ai juste nos script ansible à lancer.
@@ -14,6 +14,8 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 #### Elouan
 - open-wec
 - wazuh
+- Débug GOAD proxmox
+- Analyse log Chainsaw/Hayabusa 
 
 ### Nos blocages
 
@@ -25,7 +27,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 
 #### Elouan
 - Génération d'un SPN pour open-wec
-- 
+- SID dupliqué des VM cloné
 
 ### Ce qu'on a appris
 
@@ -38,8 +40,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 #### Elouan
 - L'utilisation d'un AD (domaine enfant, relation entre forêt, GPO)
 - Utilisattion des rôles ansible
-- Perfection de git 
-
+- Perfection de git
 
 ## Annexes
 - [ ] GOAD Proxmox (Manuel)
@@ -56,4 +57,4 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 - [ ] Splunk (Manuel)
 - [x] [Versioning Git](CR/git.md)
 - [ ] Attaques (Manuel)
-	- [ ] Rapport
+- [ ] [Chainsaw/Hayabusa](CR/log-analyze.md)
