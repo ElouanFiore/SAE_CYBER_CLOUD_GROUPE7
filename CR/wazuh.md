@@ -1,7 +1,7 @@
 # Serveur Wazuh
 
 ## Installation
-Pour installer le serveur j'ai suivi la procédure pas à pas de la documentation du Wazuh et j'ai traduit toutes les étapes en tâche ansible. Il est maintenant déployable avec un [playbook](../playbooks/wazuh-server.yml). Pour permettre de télécharger certains paquets plus rapidement j'ai renseigné le miroir Debian de l'IUT et j'ai utilisé un redirecteur conditionnel sur le DNS de DC01 afin de pouvoir l'atteindre :
+Pour installer le serveur j'ai suivi la procédure pas à pas de la documentation du Wazuh et j'ai traduit toutes les étapes en tâche ansible. Il est maintenant déployable avec un [playbook](../playbooks/wazuh-server.yml). Pour permettre de télécharger certains paquets plus rapidement j'ai renseigné le miroir Debian de l'IUT et j'ai utilisé un redirecteur conditionnel sur le DNS de DC01 afin de pouvoir l'atteindre par son IP privé :
 ![Alt text](images/wazuh-conditional.png)
 
 ## Configuration
