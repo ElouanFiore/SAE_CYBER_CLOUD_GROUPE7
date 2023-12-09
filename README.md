@@ -67,7 +67,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 - [x] [Wazuh](CR/wazuh.md) (Automatisé)
 	- [x] [Installation agent par groupe DC/Servers](CR/wazuh-agent.md) (Automatisé)
 - [x] [Elastic (Automatisé)](CR/deploiement_elastic.md)
-- [ ] Splunk (Manuel)
+- [x] [Splunk (Manuel)](CR/install_splunk.md)
 - [x] [Versioning Git](CR/git.md)
 - [ ] Attaques (Manuel)
 - [ ] [Chainsaw/Hayabusa](CR/log-analyze.md)
