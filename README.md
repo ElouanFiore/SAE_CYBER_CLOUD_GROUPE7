@@ -10,7 +10,10 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 - Scripts Python Suricata
 
 #### Antoine
-- 
+- Déploiement automatisé d'élastic search avec ansible (policies, agent, kibana, elastic, fleet)
+- Déploiement de splunk
+- Attaque de GOAD
+- Déploiement du trello (création et liste des tâches)
 
 #### Elouan
 - open-wec
@@ -24,7 +27,10 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 - Attribuition de domain child sur les machines windows via Ansible (aprés j'ai reussi)
 
 #### Antoine
-- 
+- Intéraction avec les divers composants lors de l'automatisation (kibana, elastic, fleet)
+- délpoiement de splunk et des spécificités des inputs
+- Techniques d'énumération d'AD
+- Familiaristion avec les modules windows d'ansible
 
 #### Elouan
 - Génération d'un SPN pour open-wec
@@ -39,7 +45,11 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 - Bonne connaissance sur infrastructures virtualisés (schematisation, deployment)
 
 #### Antoine
-- 
+- utilisation des roles ansible
+- utilisation plus en profondeur de la syntaxe jinja2 (ouverture de fichier, boucles)
+- Compréehiension de l'environnement active directory et de ses enjeux (kerberos, TGT, GPO)
+- l'utilisation des patch et de git.
+- Les intéractions avec l'api elastic, kibana et fleet
 
 #### Elouan
 - L'utilisation d'un AD (domaine enfant, relation entre forêt, GPO)
