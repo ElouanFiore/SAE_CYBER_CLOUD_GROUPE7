@@ -18,8 +18,9 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 #### Elouan
 - open-wec
 - wazuh
-- Débug GOAD proxmox
-- Analyse log Chainsaw/Hayabusa 
+- Débug GOAD sur proxmox
+- Analyse log Chainsaw/Hayabusa
+- Gestion du repo git 
 
 ### Nos blocages
 
@@ -52,14 +53,14 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 - Les intéractions avec l'api elastic, kibana et fleet
 
 #### Elouan
-- L'utilisation d'un AD (domaine enfant, relation entre forêt, GPO)
+- Mise en place des forêts AD (domaine enfant, relation entre forêt, Admin du domain/d'entreprise)
 - Utilisattion des rôles ansible
 - Perfection de git
 
 ## Annexes
 - [x] [GOAD Proxmox](CR/goad_proxmox.pdf)(Manuel)
 - [x] [Accès VPN](CR/vpn.md) (Automatisé)
-- [ ] Suricata (Manuel)
+- [x] Suricata (Manuel)
 - [x] [Sysmon](CR/sysmon.md) (Automatisé)
 - [x] [Audit](CR/audit.md) (Automatisé)
 - [x] [open-wec](CR/openwec.md) (Automatisé)
@@ -70,4 +71,4 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 - [x] [Splunk (Manuel)](CR/install_splunk.md)
 - [x] [Versioning Git](CR/git.md)
 - [ ] Attaques (Manuel)
-- [ ] [Chainsaw/Hayabusa](CR/log-analyze.md)
+- [x] [Chainsaw/Hayabusa](CR/log-analyze.md)
