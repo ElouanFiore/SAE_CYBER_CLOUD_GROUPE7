@@ -60,11 +60,7 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 ## Annexes
 - [x] [GOAD Proxmox](CR/goad_proxmox.pdf)(Manuel)
 - [x] [Accès VPN](CR/vpn.md) (Automatisé)
-<<<<<<< HEAD
 - [x] [Suricata (Manuel)](CR/install_suricata.md)
-=======
-- [x] Suricata (Manuel)
->>>>>>> da081e20ff5ae401af540c0f3a43b2e50d454a24
 - [x] [Sysmon](CR/sysmon.md) (Automatisé)
 - [x] [Audit](CR/audit.md) (Automatisé)
 - [x] [open-wec](CR/openwec.md) (Automatisé)
