@@ -70,5 +70,5 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 - [x] [Elastic (Automatisé)](CR/deploiement_elastic.md)
 - [x] [Splunk (Manuel)](CR/install_splunk.md)
 - [x] [Versioning Git](CR/git.md)
-- [ ] Attaques (Manuel)
+- [x] [Attaques](CR/Pentest_GOAD.md) (Manuel)
 - [x] [Chainsaw/Hayabusa](CR/log-analyze.md)
