@@ -8,6 +8,8 @@ Nous nous sommes divisé les tâches selon ce que nous préférions faire. Nous 
 #### Lucas
 - Deployment GOAD Proxmox
 - Scripts Python Suricata
+- schema réseau
+- Firewall (pfsense)
 
 #### Antoine
 - Déploiement automatisé d'élastic search avec ansible (policies, agent, kibana, elastic, fleet)
